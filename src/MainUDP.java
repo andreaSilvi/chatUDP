@@ -60,8 +60,21 @@ public class MainUDP {
 						else
 							soc.SetIp();
 					}
+					if(app.equals("-flmsg")){
+						String app2;
+						if(!(app2=s.nextToken()).equals(null))
+							System.out.print("messaggio a "+app2+": ");
+						else{
+							System.out.print("indirizzo ip: ");
+							app2=in.nextLine();
+							System.out.print("messaggio a "+app2+": ");
+						}
+						String n=in.nextLine();
+						soc.Send(n, InetAddress.getByName(app2));
+						System.out.println(n);
+					}
 					if(app.equals("-close"))
-						soc.StopTh();
+						break;
 					}
 				else	
 					soc.Send(msg);
