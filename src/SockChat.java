@@ -59,7 +59,6 @@ public class SockChat implements Runnable{
 		try {
 			IPAddress=InetAddress.getByName(ip);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

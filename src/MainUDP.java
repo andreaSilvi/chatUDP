@@ -10,7 +10,6 @@ public class MainUDP {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		
-		//TODO metodi creati
 		Scanner in=new Scanner(System.in);
 		SockChat soc=new SockChat();
 		Thread receive=new Thread(soc);
@@ -29,11 +28,8 @@ public class MainUDP {
 		msg=nome.toUpperCase()+": "+in.nextLine();
 		
 		if(!ip.equals("")){
-			//if(ControlloIp(ip)){
+			//if ControlloIp ip
 				soc.Send(msg, InetAddress.getByName(ip));
-			/*}
-			else
-				soc.Send(msg);*/
 		}
 		else
 			soc.Send(msg);
@@ -80,7 +76,7 @@ public class MainUDP {
 					soc.Send(msg);
 			}
 			
-			//fine controllo
+		//fine controllo
 		}
 		
 		soc.StopTh();
