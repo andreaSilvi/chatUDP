@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class SockChat implements Runnable{
 
@@ -46,6 +47,12 @@ public class SockChat implements Runnable{
 	
 	public void SetIp(InetAddress ip){
 		IPAddress=ip;
+	}
+	
+	public void SetIp(){
+		System.out.print("inserisci ip: ");
+		Scanner i=new Scanner(System.in);
+		SetIp(i.nextLine());
 	}
 	
 	public void SetIp(String ip){

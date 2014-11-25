@@ -46,8 +46,28 @@ public class MainUDP {
 			
 			if(msg.equals(nome.toUpperCase()+": "+"<z"))
 				break;
-
-			soc.Send(msg);
+			//controllo comadi
+			
+			String app;
+			StringTokenizer s=new StringTokenizer(msg);
+			s.nextToken();
+			if(!(app=s.nextToken()).equals(null)){
+				if(app.charAt(0)=='-'){
+					if(app.equals("-sIp")){
+						String app2;
+						if(!(app2=s.nextToken()).equals(null))
+							soc.SetIp(app2);
+						else
+							soc.SetIp();
+					}
+					if(app.equals("-close"))
+						soc.StopTh();
+					}
+				else	
+					soc.Send(msg);
+			}
+			
+			//fine controllo
 		}
 		
 		soc.StopTh();
