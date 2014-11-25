@@ -22,6 +22,7 @@ public class SockChat implements Runnable{
 		sendData=new byte[1024];
 
 	}
+	//1
 	
 	public void StopTh(){flag=false;stopTH=false;}
 	
