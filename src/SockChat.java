@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
 
 public class SockChat implements Runnable{
 
-	private static int port=9868;//9888;
+	private static int port=9888;
 	private DatagramSocket serverSocket;
 	private byte[] receiveData;
     private byte[] sendData;
