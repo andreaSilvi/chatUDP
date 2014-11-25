@@ -10,6 +10,7 @@ public class MainUDP {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		
+		//TODO metodi creati
 		Scanner in=new Scanner(System.in);
 		SockChat soc=new SockChat();
 		Thread receive=new Thread(soc);

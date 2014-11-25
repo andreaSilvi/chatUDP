@@ -4,6 +4,7 @@ import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 
 public class SockChat implements Runnable{
@@ -22,7 +23,6 @@ public class SockChat implements Runnable{
 		sendData=new byte[1024];
 
 	}
-	//1
 	
 	public void StopTh(){flag=false;stopTH=false;}
 	
@@ -44,11 +44,33 @@ public class SockChat implements Runnable{
 		}
 	}
 	
+	public void SetIp(InetAddress ip){
+		IPAddress=ip;
+	}
+	
+	public void SetIp(String ip){
+		try {
+			IPAddress=InetAddress.getByName(ip);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void Send(String msg, InetAddress ip) throws IOException{
 			
-			IPAddress=ip;
-			Send(msg);
+		if(IPAddress!=null){
+			cleanSend();
+			flag=false;
+			
+			sendData = msg.getBytes();
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
+			       
+			serverSocket.send(sendPacket);
+			
+			flag=true;
 		}
+	}
 	
 	public void close(){
 		serverSocket.close();
