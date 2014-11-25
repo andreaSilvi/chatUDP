@@ -23,65 +23,63 @@ public class MainUDP {
 		receive.start();
 		
 		String msg;
-		
-		System.out.print("io: ");
-		msg=nome.toUpperCase()+": "+in.nextLine();
-		
+				
 		if(!ip.equals("")){
 			//if ControlloIp ip
-				soc.Send(msg, InetAddress.getByName(ip));
+				soc.SetIp(ip);
 		}
-		else
-			soc.Send(msg);
-			
 			
 		while(true){
 			
 			System.out.print("io: ");
 			msg=nome.toUpperCase()+": "+in.nextLine();
 			
-			if(msg.equals(nome.toUpperCase()+": "+"<z"))
-				break;
 			//controllo comadi
 			
 			String app;
 			StringTokenizer s=new StringTokenizer(msg);
 			s.nextToken();
-			if(!(app=s.nextToken()).equals(null)){
+			if(s.countTokens()>=1){
+				app=s.nextToken();
 				if(app.charAt(0)=='-'){
+					
+					if(app.equals("-gIp")){
+						System.out.println("Ip corrente: "+soc.getIp());
+					}
 					if(app.equals("-sIp")){
-						String app2;
-						if(!(app2=s.nextToken()).equals(null))
-							soc.SetIp(app2);
+						if(s.countTokens()==1)
+							soc.SetIp(s.nextToken());
 						else
 							soc.SetIp();
+						System.out.println("Ip corrente: "+soc.getIp());
 					}
 					if(app.equals("-flmsg")){
 						String app2;
-						if(!(app2=s.nextToken()).equals(null))
+						if(s.countTokens()==1){
+							app2=s.nextToken();
 							System.out.print("messaggio a "+app2+": ");
+						}
 						else{
 							System.out.print("indirizzo ip: ");
 							app2=in.nextLine();
 							System.out.print("messaggio a "+app2+": ");
 						}
-						String n=in.nextLine();
-						soc.Send(n, InetAddress.getByName(app2));
-						System.out.println(n);
+						soc.Send(nome.toUpperCase()+": "+in.nextLine(), InetAddress.getByName(app2));
 					}
 					if(app.equals("-close"))
 						break;
 					}
+				
 				else	
 					soc.Send(msg);
 			}
 			
+			
 		//fine controllo
 		}
-		
-		soc.StopTh();
-		soc.close();
 		in.close();
+		soc.StopTh();
+		receive.stop();
 	}
 
 	private static boolean ControlloIp(String ip){

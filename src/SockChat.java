@@ -7,16 +7,15 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class SockChat implements Runnable{
 
-	private static int port=9888;
+	private static int port=9868;//9888;
 	private DatagramSocket serverSocket;
 	private byte[] receiveData;
     private byte[] sendData;
     private InetAddress IPAddress=null;
-    private boolean flag=true;
-    private boolean stopTH=true;
 	
 	public SockChat() throws SocketException{
 		serverSocket=new DatagramSocket(port);
@@ -25,24 +24,27 @@ public class SockChat implements Runnable{
 
 	}
 	
-	public void StopTh(){flag=false;stopTH=false;}
+	public String getIp(){
+		if(IPAddress==null)
+			return "null";
+		else
+			return IPAddress.toString();
+		}
+	
+	public void StopTh(){
+		try {
+			Send("CONSOLE: a-.-a",InetAddress.getByName("127.0.0.1"));
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void Send(String msg) throws IOException{
 		
-		if(IPAddress!=null){
-			cleanSend();
-			flag=false;
-			
-			sendData = msg.getBytes();
-			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
-			       
-			serverSocket.send(sendPacket);
-			
-			flag=true;
-		}
-		else{
+		if(IPAddress!=null)
+			Send(msg,IPAddress);
+		else
 			System.out.println("---ATTESA PACCHETTO---");
-		}
 	}
 	
 	public void SetIp(InetAddress ip){
@@ -63,19 +65,19 @@ public class SockChat implements Runnable{
 		}
 	}
 	
-	public void Send(String msg, InetAddress ip) throws IOException{
+	public void Send(String msg, InetAddress ip){
 			
-		if(IPAddress!=null){
 			cleanSend();
-			flag=false;
 			
 			sendData = msg.getBytes();
 			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ip, port);
 			       
-			serverSocket.send(sendPacket);
-			
-			flag=true;
-		}
+			try {
+				serverSocket.send(sendPacket);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 	}
 	
 	public void close(){
@@ -93,34 +95,41 @@ public class SockChat implements Runnable{
 	@Override
 	public void run() {
 		int i=0;
+		StringTokenizer s;
 		while(true){
+			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			
-			if(flag){
-				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			try {
 				
-				try {
-					
-					serverSocket.receive(receivePacket);
-					
-				} catch (IOException e) {
-					
-					e.printStackTrace();
-					
-				}
+				serverSocket.receive(receivePacket);
 				
-				if(i==0){
-					IPAddress = receivePacket.getAddress();
-		            port = receivePacket.getPort();
-				}
-				       
-				String modifiedSentence = new String(receivePacket.getData());
-				System.out.println("\n"+modifiedSentence);
-				cleanReceive();
+			} catch (IOException e) {
 				
-				i++;
+				e.printStackTrace();
+				
 			}
-			if(!stopTH)
-				break;
-		}		
+			
+			if(i==0){
+				IPAddress = receivePacket.getAddress();
+	            port = receivePacket.getPort();
+			}
+			       
+			String modifiedSentence = new String(receivePacket.getData());
+			
+			s=new StringTokenizer(modifiedSentence);
+			s.nextToken();
+			
+			if(s.countTokens()==1)
+				if(s.nextToken().equals("a-.-a"))
+					break;
+			else
+				System.out.println("\n"+modifiedSentence);
+			
+			cleanReceive();
+			
+			i++;
+		}
+		
+	close();
 	}
 }
