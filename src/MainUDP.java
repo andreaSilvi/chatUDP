@@ -43,6 +43,16 @@ public class MainUDP {
 				app=s.nextToken();
 				if(app.charAt(0)=='-'){
 					
+					if(app.equals("-help"))
+						help();
+					if(app.equals("-aIp")){
+						if(s.countTokens()==1)
+							soc.AddIp(s.nextToken());
+						else{
+							System.out.print("inserisci l'ip da inserire: ");
+							soc.AddIp(in.nextLine());
+						}
+					}
 					if(app.equals("-gIp")){
 						System.out.println("Ip corrente: "+soc.getIp());
 					}
@@ -80,6 +90,20 @@ public class MainUDP {
 		in.close();
 		soc.StopTh();
 		receive.stop();
+	}
+	
+	private static void help(){
+		System.out.println(
+				"Comandi per la chat:\n" +
+				"	-aIp	aggiungere un indirizzo ip a cui\n" +
+				"			inviare i messaggi\n\n" +
+				"	-sIp	rimuove tutti gli indirizzi aggiunti\n" +
+				"			e ne aggiunge solo 1\n\n" +
+				"	-gIp	visualizza gli indirizzi a cui si sta\n" +
+				"			inviando\n\n" +
+				"	-flmsg	FlashMessage: consente di inviare un\n" +
+				"			messaggio veloce a un altro indirizzo ip\n\n" +
+				"	-close	ferma la ricezione e chiude il socket\n\n");
 	}
 
 	private static boolean ControlloIp(String ip){

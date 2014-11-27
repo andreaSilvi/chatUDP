@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 public class SockChat implements Runnable{
 
@@ -15,7 +16,7 @@ public class SockChat implements Runnable{
 	private DatagramSocket serverSocket;
 	private byte[] receiveData;
     private byte[] sendData;
-    private InetAddress IPAddress=null;
+    private Vector<InetAddress> IPAddress=new Vector<InetAddress>();
 	
 	public SockChat() throws SocketException{
 		serverSocket=new DatagramSocket(port);
@@ -25,7 +26,7 @@ public class SockChat implements Runnable{
 	}
 	
 	public String getIp(){
-		if(IPAddress==null)
+		if(IPAddress.size()==0)
 			return "null";
 		else
 			return IPAddress.toString();
@@ -41,14 +42,30 @@ public class SockChat implements Runnable{
 	
 	public void Send(String msg) throws IOException{
 		
-		if(IPAddress!=null)
-			Send(msg,IPAddress);
+		if(IPAddress.size()!=0){
+			
+			for(int i=0;i<IPAddress.size();i++)
+				Send(msg,IPAddress.get(i));
+		}
 		else
 			System.out.println("---ATTESA PACCHETTO---");
 	}
 	
+	public void AddIp(InetAddress ip){
+		IPAddress.add(ip);
+	}
+	
+	public void AddIp(String ip){
+		try {
+			AddIp(InetAddress.getByName(ip));
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void SetIp(InetAddress ip){
-		IPAddress=ip;
+		IPAddress.removeAllElements();
+		IPAddress.add(ip);
 	}
 	
 	public void SetIp(){
@@ -59,7 +76,8 @@ public class SockChat implements Runnable{
 	
 	public void SetIp(String ip){
 		try {
-			IPAddress=InetAddress.getByName(ip);
+			IPAddress.removeAllElements();
+			IPAddress.add(InetAddress.getByName(ip));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -109,8 +127,8 @@ public class SockChat implements Runnable{
 				
 			}
 			
-			if(i==0){
-				IPAddress = receivePacket.getAddress();
+			if(IPAddress.size()==0){
+				IPAddress.add(receivePacket.getAddress());
 	            port = receivePacket.getPort();
 			}
 			       
