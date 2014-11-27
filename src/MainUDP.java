@@ -17,18 +17,21 @@ public class MainUDP {
 		System.out.print("ip: ");
 		String ip=in.nextLine();
 		
+		if(!ip.equals("")){
+			String app;
+			if(!(app=soc.ControlloIp(ip)).equals("null")){
+				soc.SetIp(app);
+				ip=app;
+			}
+		}
+		
 		System.out.print("nome: ");
 		String nome=in.nextLine();
 		
 		receive.start();
 		
 		String msg;
-				
-		if(!ip.equals("")){
-			//if ControlloIp ip1
-				soc.SetIp(ip);
-		}
-			
+
 		while(true){
 			
 			System.out.print("io: ");
@@ -90,6 +93,7 @@ public class MainUDP {
 		in.close();
 		soc.StopTh();
 		receive.stop();
+		
 	}
 	
 	private static void help(){
@@ -106,25 +110,4 @@ public class MainUDP {
 				"	-close	ferma la ricezione e chiude il socket\n\n");
 	}
 
-	private static boolean ControlloIp(String ip){
-		
-		boolean ret=false;
-		int app;
-		StringTokenizer s=new StringTokenizer(ip,".");
-		
-		if(s.countTokens()==4)
-			ret=true;
-		else
-			ret=false;
-		
-		for(int i=0;i<4;i++){
-			app=Integer.parseInt(s.nextToken());
-			if(app>0 && app<=255 && ret==true)
-				ret=true;
-			else
-				ret=false;
-		}
-		
-		return ret;
-	}
 }

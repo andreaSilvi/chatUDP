@@ -12,7 +12,7 @@ import java.util.Vector;
 
 public class SockChat implements Runnable{
 
-	private static int port=9888;
+	private static int port=9888;//TODO 9888
 	private DatagramSocket serverSocket;
 	private byte[] receiveData;
     private byte[] sendData;
@@ -55,9 +55,32 @@ public class SockChat implements Runnable{
 		IPAddress.add(ip);
 	}
 	
+	public String ControlloIp(String ip){
+		String ret=ip;
+		StringTokenizer s=new StringTokenizer(ip,".");
+		if(s.countTokens()==4){
+			int[] v=new int[4];
+			for(int i=0;i<4;i++)
+				v[i]=Integer.parseInt(s.nextToken());
+			
+			for(int i=0;i<4 || ret.equals("null");i++){
+				if(v[i]<0 && v[i]>255)
+					ret="null";
+			}
+		}
+		else{
+			ret="null";
+			System.out.println("ERRORE: L'indirizzo inserito non è un ip\n");
+		}
+			
+		return ret;
+	}
+	
 	public void AddIp(String ip){
 		try {
-			AddIp(InetAddress.getByName(ip));
+			String app;
+			if(!(app=ControlloIp(ip)).equals("null"))
+				AddIp(InetAddress.getByName(app));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -65,7 +88,7 @@ public class SockChat implements Runnable{
 	
 	public void SetIp(InetAddress ip){
 		IPAddress.removeAllElements();
-		IPAddress.add(ip);
+		AddIp(ip);
 	}
 	
 	public void SetIp(){
@@ -75,16 +98,11 @@ public class SockChat implements Runnable{
 	}
 	
 	public void SetIp(String ip){
-		try {
 			IPAddress.removeAllElements();
-			IPAddress.add(InetAddress.getByName(ip));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+			AddIp(ip);
 	}
 	
 	public void Send(String msg, InetAddress ip){
-			
 			cleanSend();
 			
 			sendData = msg.getBytes();
@@ -112,7 +130,6 @@ public class SockChat implements Runnable{
 	
 	@Override
 	public void run() {
-		int i=0;
 		StringTokenizer s;
 		while(true){
 			DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
@@ -145,7 +162,6 @@ public class SockChat implements Runnable{
 			
 			cleanReceive();
 			
-			i++;
 		}
 		
 	close();
