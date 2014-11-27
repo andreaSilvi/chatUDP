@@ -25,7 +25,7 @@ public class MainUDP {
 		String msg;
 				
 		if(!ip.equals("")){
-			//if ControlloIp ip
+			//if ControlloIp ip1
 				soc.SetIp(ip);
 		}
 			
