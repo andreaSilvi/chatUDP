@@ -59,6 +59,12 @@ public class MainUDP {
 					if(app.equals("-gIp")){
 						System.out.println("Ip corrente: "+soc.getIp());
 					}
+					if(app.equals("-req")){
+						soc.sendRequest();
+					}
+					if(app.equals("-gReq")){
+						System.out.println(soc.getOnline());
+					}
 					if(app.equals("-sIp")){
 						if(s.countTokens()==1)
 							soc.SetIp(s.nextToken());
@@ -97,7 +103,7 @@ public class MainUDP {
 	}
 	
 	private static void help(){
-		System.out.println(
+		System.out.print(
 				"Comandi per la chat:\n" +
 				"	-aIp	aggiungere un indirizzo ip a cui\n" +
 				"			inviare i messaggi\n\n" +
@@ -107,6 +113,8 @@ public class MainUDP {
 				"			inviando\n\n" +
 				"	-flmsg	FlashMessage: consente di inviare un\n" +
 				"			messaggio veloce a un altro indirizzo ip\n\n" +
+				"	-req	invia richieste per verificare chi è online\n\n" +
+				"	-gReq	visualizza le persone online\n\n" +
 				"	-close	ferma la ricezione e chiude il socket\n\n");
 	}
 

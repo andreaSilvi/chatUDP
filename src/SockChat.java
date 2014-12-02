@@ -13,10 +13,12 @@ import java.util.Vector;
 public class SockChat implements Runnable{
 
 	private static int port=9888;//TODO 9888
+	private String Broadcast="10.0.0.255";
 	private DatagramSocket serverSocket;
 	private byte[] receiveData;
     private byte[] sendData;
     private Vector<InetAddress> IPAddress=new Vector<InetAddress>();
+    private Vector<InetAddress> online=new Vector<InetAddress>();
 	
 	public SockChat() throws SocketException{
 		serverSocket=new DatagramSocket(port);
@@ -24,6 +26,10 @@ public class SockChat implements Runnable{
 		sendData=new byte[1024];
 
 	}
+	
+	public void setBroadcast(String ip){Broadcast=ip;}
+	
+	public String getBroadcast(){return Broadcast;}
 	
 	public String getIp(){
 		if(IPAddress.size()==0)
@@ -74,6 +80,15 @@ public class SockChat implements Runnable{
 		}
 			
 		return ret;
+	}
+	
+	public void sendRequest(){
+		try {
+			Send("CONSOLE: -ping-", InetAddress.getByName(Broadcast));
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void AddIp(String ip){
@@ -154,9 +169,17 @@ public class SockChat implements Runnable{
 			s=new StringTokenizer(modifiedSentence);
 			s.nextToken();
 			
-			if(s.countTokens()==1)
-				if(s.nextToken().equals("a-.-a"))
+			//controlli sui messaggi
+			if(s.countTokens()==1){
+				String cmd=s.nextToken();
+				if(cmd.equals("a-.-a"))
 					break;
+				if(cmd.equals("-ping-"))
+					sendAnswers(receivePacket.getAddress());
+				if(cmd.equals("-myip-"))
+					online.add(receivePacket.getAddress());
+			}
+			//fine controlli
 			else
 				System.out.println("\n"+modifiedSentence);
 			
@@ -165,5 +188,13 @@ public class SockChat implements Runnable{
 		}
 		
 	close();
+	}
+	
+	public String getOnline(){
+		return online.toString();
+	}
+
+	private void sendAnswers(InetAddress address) {
+		Send("CONSOLE: -myip-",address);		
 	}
 }
