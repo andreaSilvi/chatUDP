@@ -106,13 +106,13 @@ public class MainUDP {
 		System.out.print(
 				"Comandi per la chat:\n" +
 				"	-aIp	aggiungere un indirizzo ip a cui\n" +
-				"			inviare i messaggi\n\n" +
+				"		inviare i messaggi\n\n" +
 				"	-sIp	rimuove tutti gli indirizzi aggiunti\n" +
-				"			e ne aggiunge solo 1\n\n" +
+				"		e ne aggiunge solo 1\n\n" +
 				"	-gIp	visualizza gli indirizzi a cui si sta\n" +
-				"			inviando\n\n" +
+				"		inviando\n\n" +
 				"	-flmsg	FlashMessage: consente di inviare un\n" +
-				"			messaggio veloce a un altro indirizzo ip\n\n" +
+				"		messaggio veloce a un altro indirizzo ip\n\n" +
 				"	-req	invia richieste per verificare chi è online\n\n" +
 				"	-gReq	visualizza le persone online\n\n" +
 				"	-close	ferma la ricezione e chiude il socket\n\n");

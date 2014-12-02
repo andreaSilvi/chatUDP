@@ -13,7 +13,7 @@ import java.util.Vector;
 public class SockChat implements Runnable{
 
 	private static int port=9888;//TODO 9888
-	private String Broadcast="10.0.0.255";
+	private String Broadcast="192.168.21.255";
 	private DatagramSocket serverSocket;
 	private byte[] receiveData;
     private byte[] sendData;
